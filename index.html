@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE BLACK RADAR | OZGUR</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; user-select: none; }
+        
+        /* شاشة الدخول */
+        #login-screen { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        
+        .fingerprint-container {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 20px #0f0;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .fingerprint-container:active { transform: scale(0.9); border-color: #f00; box-shadow: 0 0 40px #f00; }
+
+        .scanner-line {
+            width: 100%;
+            height: 2px;
+            background: #0f0;
+            position: absolute;
+            top: 0;
+            animation: scan 2s infinite linear;
+            display: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        /* شريط التحميل */
+        #loading-bar-container { width: 80%; height: 10px; border: 1px solid #0f0; margin-top: 20px; display: none; }
+        #loading-bar { width: 0%; height: 100%; background: #0f0; transition: 0.1s; }
+
+        /* الواجهة الرئيسية */
+        #main-content { display: none; padding: 20px; height: 100vh; overflow-y: auto; }
+        .card { border: 1px solid #0f0; padding: 15px; background: rgba(0,255,0,0.05); margin-bottom: 20px; }
+        .glitch { color: #f00; font-weight: bold; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        button { background: transparent; border: 1px solid #0f0; color: #0f0; padding: 10px; width: 100%; margin: 10px 0; cursor: pointer; }
+        button:hover { background: #0f0; color: #000; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <h2 id="status-text" style="margin-bottom: 30px;">IDENTIFICATION REQUIRED</h2>
+        <div class="fingerprint-container" id="f-btn" onclick="startHack()">
+            <div class="scanner-line" id="s-line"></div>
+            <span style="font-size: 2rem;">👤</span>
+        </div>
+        <div id="loading-bar-container">
+            <div id="loading-bar"></div>
+        </div>
+        <p id="log-message" style="margin-top: 15px; font-size: 0.8rem; color: #555;">[ WAITING FOR BIOMETRIC SCAN ]</p>
+    </div>
+
+    <div id="main-content">
+        <h2 class="glitch">> OZGUR SYSTEM v4.0 ONLINE</h2>
+        <div class="card">
+            <h3 style="color: #0f0;">[ TARGET_DATA ]</h3>
+            <p id="ip">IP: Fetching...</p>
+            <p id="device">DEVICE: Fetching...</p>
+            <p id="battery">BATTERY: Fetching...</p>
+            <p id="location">LOC: Iraq / Baghdad (Estimated)</p>
+        </div>
+
+        <div class="card">
+            <h3>[ OZGUR_TOOLS ]</h3>
+            <button onclick="alert('جاري تشغيل محرك تحميل تيك توك بدون علامة مائية...')">TikTok Downloader</button>
+            <button onclick="alert('جاري فحص قواعد البيانات المسربة...')">Leak Scanner</button>
+            <button onclick="alert('جاري تشغيل قاموس أوزغور للغة التركية...')">Turkish Dictionary</button>
+        </div>
+    </div>
+
+    <script>
+        function startHack() {
+            // إظهار تأثيرات المسح
+            document.getElementById('s-line').style.display = "block";
+            document.getElementById('loading-bar-container').style.display = "block";
+            document.getElementById('status-text').innerText = "SCANNING BIOMETRICS...";
+            document.getElementById('status-text').style.color = "#f00";
+
+            let width = 0;
+            let bar = document.getElementById('loading-bar');
+            let log = document.getElementById('log-message');
+
+            let interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    showMain();
+                } else {
+                    width++;
+                    bar.style.width = width + "%";
+                    if (width == 20) log.innerText = "> Bypassing Firewall...";
+                    if (width == 50) log.innerText = "> Accessing Local Storage...";
+                    if (width == 80) log.innerText = "> Identity Confirmed. Welcome Özgür.";
+                }
+            }, 50); // سرعة التحميل
+        }
+
+        function showMain() {
+            document.getElementById('login-screen').style.display = "none";
+            document.getElementById('main-content').style.display = "block";
+            
+            // سحب البيانات الحقيقية للانبهار
+            fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => {
+                document.getElementById('ip').innerText = "IP: " + d.ip;
+            });
+            
+            document.getElementById('device').innerText = "OS: " + navigator.platform;
+
+            if (navigator.getBattery) {
+                navigator.getBattery().then(b => {
+                    document.getElementById('battery').innerText = "BATTERY: " + Math.round(b.level * 100) + "%";
+                });
+            }
+        }
+    </script>
+</body>
+              </html>
+              

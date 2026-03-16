@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>THE BLACK RADAR | OZGUR</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
+        
+        /* شاشة الدخول */
+        #login-screen { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 100; position: relative; }
+        .fingerprint { width: 100px; height: 100px; border: 2px solid #0f0; border-radius: 50%; cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px #0f0; }
+        .fingerprint:active { transform: scale(0.9); box-shadow: 0 0 50px #f00; border-color: #f00; }
+        
+        /* الواجهة الرئيسية */
+        #main-content { display: none; padding: 20px; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { border: 1px solid #0f0; padding: 15px; background: rgba(0,255,0,0.05); }
+        .glitch-text { animation: glitch 1s infinite; color: #f00; font-weight: bold; }
+        @keyframes glitch { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <h2 id="status-text">HOLD TO SCAN IDENTITY</h2>
+        <div class="fingerprint" onmousedown="startAccess()" onmouseup="stopAccess()"></div>
+        <p style="margin-top: 20px; color: #555;">SYSTEM BY: OZGUR AL-SAMOUQI</p>
+    </div>
+
+    <div id="main-content">
+        <h1 class="glitch-text">> ACCESS GRANTED: WELCOME AGENT OZGUR</h1>
+        <div class="dashboard">
+            <div class="card">
+                <h3>[ بيانات الهدف ]</h3>
+                <p id="ip-data">IP: جاري السحب...</p>
+                <p id="battery-data">BATTERY: --%</p>
+                <p id="device-data">OS: --</p>
+            </div>
+            <div class="card">
+                <h3>[ الأدوات النشطة ]</h3>
+                <button onclick="alert('جاري تشغيل محرك التحميل...')">Video Downloader</button>
+                <button onclick="alert('جاري فحص التسريبات...')">Leaks Finder</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let accessTimer;
+        function startAccess() {
+            document.getElementById('status-text').innerText = "SCANNING DATABASE...";
+            document.getElementById('status-text').style.color = "#f00";
+            accessTimer = setTimeout(() => {
+                document.getElementById('login-screen').style.display = "none";
+                document.getElementById('main-content').style.display = "block";
+                loadIntelligence();
+            }, 3000); // 3 ثواني ضغط للدخول
+        }
+
+        function stopAccess() {
+            clearTimeout(accessTimer);
+            document.getElementById('status-text').innerText = "HOLD TO SCAN IDENTITY";
+            document.getElementById('status-text').style.color = "#0f0";
+        }
+
+        function loadIntelligence() {
+            // سحب IP
+            fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => {
+                document.getElementById('ip-data').innerText = "IP: " + d.ip;
+            });
+            // سحب البطارية
+            navigator.getBattery().then(b => {
+                document.getElementById('battery-data').innerText = "BATTERY: " + (b.level * 100) + "%";
+            });
+            // سحب النظام
+            document.getElementById('device-data').innerText = "SYSTEM: " + navigator.platform;
+        }
+    </script>
+</body>
+</html>
